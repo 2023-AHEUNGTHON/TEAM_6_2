@@ -1,0 +1,28 @@
+<!-- post.html -->
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>글쓰기</title>
+    <link rel="stylesheet" href="{% static 'todo/bootstrap/bootstrap.min.css' %}">
+</head>
+<body>
+    <h1>글쓰기</h1>
+    <hr/>
+    <form method='post' enctype="multipart/form-data" action="{% url 'post' category=category %}">
+        {% csrf_token %}
+        <!-- 카테고리를 숨겨진 필드로 추가 -->
+        <input type="hidden" name="category" value="{{ category }}">
+        <table>
+            <tbody>
+                <tr>
+                    <td><input type="text" name="content" maxlength="30" required="" id="content"></td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary" style="margin-left: 350px;">저장</button>
+    </form>
+</body>
+</html>

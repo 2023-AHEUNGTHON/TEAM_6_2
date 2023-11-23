@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>게시판</title>
+    
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>게시판</h1>
+    <a href="{% url 'post' category=category %}" >글쓰기</a>
+    <br>
+    {% for content in write %}
+        {{ content.content }}<br>
+    {% endfor %}
+</div>
+
+</body>
+</html>
+
