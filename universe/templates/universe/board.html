@@ -15,10 +15,9 @@
     <a href="{% url 'post' category=category %}" >글쓰기</a>
     <br>
     {% for content in write %}
-        {{ content.content }}<br>
+        {{ content.user }}<br>{{ content.content }}<br>
     {% endfor %}
 </div>
 
 </body>
 </html>
-

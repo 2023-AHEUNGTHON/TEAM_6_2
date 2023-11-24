@@ -69,7 +69,8 @@ def post(request, category=None):
     if request.method == 'POST':
         content = request.POST['content']
         category = request.POST['category']
-        write = Write(content=content, category=category)
+        user = request.user 
+        write = Write(content=content, category=category, user=user)
         write.save()
         return redirect('board', category=category)
     return render(request, 'universe/post.html', {'category': category})
