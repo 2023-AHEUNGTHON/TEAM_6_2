@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <title>매칭시스템</title>
+</html>
+<body>
+    <h1>매칭시스템</h1>
+    <label for="major">Select Majors:</label>
+        <option value="" selected>All majors</option>
+        {% for major in majors %}
+            <option value="{{ major.pk }}">{{ major.name }}</option>
+        {% endfor %}
+    </label>
+
+</body>
