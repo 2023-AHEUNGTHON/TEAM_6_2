@@ -47,5 +47,6 @@ class User(AbstractUser):
 class Write(models.Model):
     content=models.TextField()
     category=models.CharField(max_length=20,null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     def __str__(self):
         return f'{self.content} [{self.id}]'
