@@ -44,9 +44,21 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     objects = UserManager()
 
-class Write(models.Model):
-    content=models.TextField()
-    category=models.CharField(max_length=20,null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+class Comment(models.Model):
+    user = models.CharField(max_length=255)
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    write = models.ForeignKey('write', related_name = "write",on_delete=models.CASCADE,db_column="post_number")
     def __str__(self):
-        return f'{self.content} [{self.id}]'
+        return f'{self.user}의 댓글 - {self.created_at}'
+
+class Write(models.Model):
+    post_number = models.AutoField(primary_key=True, default=1)
+    content = models.TextField()
+    category = models.CharField(max_length=20, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    comments = models.ManyToManyField(Comment, related_name='comments', blank=True)
+
+    def __str__(self):
+        return f'{self.content} [{self.post_number}]'
+    

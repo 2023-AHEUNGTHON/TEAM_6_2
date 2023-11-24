@@ -75,7 +75,17 @@ def post(request, category=None):
         return redirect('board', category=category)
     return render(request, 'universe/post.html', {'category': category})
 
-def comment_page(request):
-    write = Write.objects.all()
-    return render(request, 'universe/comment_page.html',{'write':write,})
+def comment_page(request, post_number):
+    post = Write.objects.get(post_number=int(post_number))
+    comments = post.comments.all()
+    print(comments)
+    return render(request, 'universe/comment_page.html', {'post': post, 'comments': comments})
 
+def add_comment(request, post_number):
+    if request.method == 'POST':
+        post = Write.objects.get(post_number=post_number)
+        user = request.user
+        text = request.POST['comment_text']
+        Comment.objects.create(user=user, text=text, write=post)
+        
+    return redirect('comment_page', post_number=post_number)

@@ -1,20 +1,45 @@
+<!-- comment_page.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>{{ post.content }} - 댓글</title>
 </head>
 <body>
 
 <div class="container mt-5">
-    {% for content in write %}
-    <h5>{{content}}</h5>
-    {% endfor %}
-    {% for comment in write %}
-    <h7>{{comment}}</h7>
-    {% endfor%}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ post.content }}</h1>
+            
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            
+            {% for comment in comments %}
+                <p>{{ comment.user }}: {{ comment.text }}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <form method="post" action="{% url 'add_comment' post_number=post.post_number %}">
+                {% csrf_token %}
+                
+                <label for="comment_text">댓글:</label>
+                <textarea name="comment_text" required></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary">댓글 달기</button>
+            </form>
+        </div>
+    </div>
 </div>
-    
 
 </body>
 </html>
