@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 ]
 
+#학교 이메일 인증 작업중
+"""
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -53,8 +55,8 @@ SITE_ID = 1
 ACCOOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'"""
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
