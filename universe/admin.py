@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from universe.models import  Write
+from .models import  *
 
 # Register your models here.
 admin.site.register(Write)
+admin.site.register(User)

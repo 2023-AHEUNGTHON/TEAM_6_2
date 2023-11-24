@@ -39,7 +39,24 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'universe',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
+
+#학교 이메일 인증 작업중
+"""
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_ID = 1
+ACCOOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'none'"""
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -101,6 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL='universe.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

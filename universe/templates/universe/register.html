@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>회원가입</h1>
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <p>이름 : <input type="text" name="username"></p>
+            <p>학년 : <input type="text" name="grade"></p>
+            <p>학교 : <input type="text" name="school"></p>
+            <p>학교 이메일 : <input type="text" name="email"></p>
+            <p>전공 : <input type="text" name="major"></p>
+            <p>프로젝트 분야 : <input type="text" name="project"></p>
+            <p>학번 : <input type="text" name="student_id"></p>
+            <p>비밀번호 : <input type="password" name="password"></p>
+            <p>프로젝트 진행 가능 날짜 : <input type="text" name="available"></p>
+            <p><input type="submit" value="회원가입"></p>
+        </form>
+    </div>
+</body>
+</html>
