@@ -13,81 +13,6 @@ from rest_framework import viewsets
 from django.db import IntegrityError
 # Create your views here.
 
-"""
-def login(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-        user = authenticate(email=email, password=password)
-        if user:
-            request.session['user'] = user.id
-            print("login success")
-            return redirect('main')
-        else:
-            print("login fail")
-            return render(request, 'universe/login.html', {'error': '아이디나 비밀번호가 틀렸습니다.'})
-    else:
-        print("login fail")
-        return render(request, 'universe/login.html')
-    
-def logout(request):
-    if request.session.get('user'):
-        del(request.session['user'])
-    return redirect('main')
-
-def register(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        grade = request.POST['grade']
-        school = request.POST['school']
-        email = request.POST['email']
-        major = request.POST['major']
-        project = request.POST['project']
-        student_id = request.POST['student_id']
-        password = request.POST['password']
-        available = request.POST['available']
-        user = User.objects.create_user(username=username, 
-                                        grade=grade, 
-                                        school=school, 
-                                        email=email, 
-                                        major=major, 
-                                        project=project, 
-                                        student_id=student_id, 
-                                        password=password, 
-                                        available=available)
-        user.save()
-        print("register success")
-        return redirect('login')
-    else:
-        print("register fail")
-        return render(request, 'universe/register.html')
-    
-def main(request):
-    categories = ['Video', 'Design', 'Photo', 'Web', 'Composing', 'Product Manager', 'IOS', 'Lyric', 'Vocal', 'Android', 'Marketing', 'Dance', 'Server', 'Advertisement', 'etc']
-    return render(request, 'universe/main.html', {'categories': categories})
-
-def board(request, category=None):
-    if category:
-        write = Write.objects.filter(category=category)
-    else:
-        write = Write.objects.all()
-    return render(request, 'universe/board.html', {'write': write, 'category': category})
-
-def post(request, category=None):
-    if request.method == 'POST':
-        content = request.POST['content']
-        category = request.POST['category']
-        user = request.user 
-        write = Write(content=content, category=category, user=user)
-        write.save()
-        return redirect('board', category=category)
-    return render(request, 'universe/post.html', {'category': category})
-
-def comment_page(request):
-    write = Write.objects.all()
-    return render(request, 'universe/comment_page.html',{'write':write,})
-
-"""
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -113,9 +38,9 @@ class Register(APIView):
                                        email=request.data['email'],
                                        major=request.data['major'],
                                        project=request.data['project'],
-                                       student_id=request.data['student_id'],
                                        password=request.data['password'],
-                                       available=request.data['available'],)
+                                       start_date=request.data['start_date'],
+                                       end_date=request.data['end_date'])
             user.set_password(request.data['password'])
             user.save()
             serializer = UserSerializer(user)
@@ -145,7 +70,8 @@ class SearchUser(APIView):
         email = data.get('email')
         major = data.get('major')
         project = data.get('project')
-        available = data.get('available')
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
 
         if username:
             user = User.objects.filter(username=username)
@@ -159,8 +85,7 @@ class SearchUser(APIView):
             user = User.objects.filter(major=major)
         elif project:
             user = User.objects.filter(project=project)
-        elif available:
-            user = User.objects.filter(available=available)
+        
         else:
             user = User.objects.all()
 
@@ -182,23 +107,8 @@ class CreatePostView(APIView):
             return Response({"ERROR": str(e)})
 
 class ReadPostView(APIView):
-    def get(self, request, *args, **kwargs):
-        data = request.data
-        title = data.get('title')
-        content = data.get('content')
-        category = data.get('category')
-        user = data.get('user')
-        
-        if title:
-            post = Post.objects.filter(title=title)
-        elif content:
-            post = Post.objects.filter(content=content)
-        elif category:
-            post = Post.objects.filter(category=category)
-        elif user:
-            post = Post.objects.filter(user=User.objects.get(id = user))
-        else:
-            post = Post.objects.all()
+    def get(self, request, category, *args, **kwargs):
+        post = Post.objects.filter(category=category)
         serializer = PostSerializer(post, many=True)
         return Response(serializer.data)
 
@@ -240,11 +150,7 @@ class PostDetailView(APIView):
         return Response(serializer.data)
     
 class MatchingUserView(APIView):
-    def get(self, request, *args, **kwargs):
-        data = request.data
-        project = data.get('project')
-        major = data.get('major')
-
+    def get(self, request, project, major, *args, **kwargs):
         users = User.objects.filter(project=project, major=major)
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
@@ -259,10 +165,7 @@ class DetailUserView(APIView):
         return Response(serializer.data)
     
 class UserProfileView(APIView):
-    def get(self, request, *args, **kwargs):
-        data = request.data
-        id = data.get('id')
-
+    def get(self, request, id, *args, **kwargs):
         user = User.objects.get(id=id)
         serializer = UserSerializer(user)
         return Response(serializer.data)
@@ -272,12 +175,14 @@ class UpdateUserProfileView(APIView):
         data = request.data
         major = data.get('major')
         project = data.get('project')
-        available = data.get('available')
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
         id = data.get('id')
         user = User.objects.get(id=id)
         user.major = major
         user.project = project
-        user.available = available
+        user.start_date = start_date
+        user.end_date = end_date
         user.save()
         serializer = UserSerializer(user)
         return Response(serializer.data)
