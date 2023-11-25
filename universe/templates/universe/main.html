@@ -9,10 +9,10 @@
 <body>
     <h1>게시판 선택</h1>
     <div>
-        {% for category in categories %}
+    {% for category in categories %}
         <div>
             <a href="{% url 'board' category=category %}"> {{ category }}  </a>
-            </div>
+        </div>
     {% endfor %}
     </div>
 </body>
