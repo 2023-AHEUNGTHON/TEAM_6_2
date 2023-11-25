@@ -39,6 +39,7 @@ class User(AbstractUser):
     student_id = models.CharField(max_length=20, null=False)
     password = models.CharField(max_length=100, null=False)
     available = models.CharField(max_length=30, null=False)
+    is_active = models.BooleanField()
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

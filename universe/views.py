@@ -1,7 +1,9 @@
+from email.message import EmailMessage
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.contrib.auth import authenticate
+from django.contrib import auth
 
 from .models import *
 from .serializer import *
@@ -11,6 +13,14 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets
 from django.db import IntegrityError
+
+#SMTP
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes, force_str
+from .tokens import account_activation_token
 # Create your views here.
 
 """
@@ -117,11 +127,27 @@ class Register(APIView):
                                        password=request.data['password'],
                                        available=request.data['available'],)
             user.set_password(request.data['password'])
+            user.is_active = False
             user.save()
+            self.confirmation_email(user)
             serializer = UserSerializer(user)
             return Response(serializer.data)
         except IntegrityError as e:
             return Response({"ERROR": str(e)})
+    
+    def confirmation_email(request, user):
+        current_site = get_current_site(request) 
+        message = render_to_string('accounts/activation_email.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': account_activation_token.make_token(user),
+        })
+        mail_title = "계정 활성화 확인 이메일"
+        mail_to = request.POST["email"]
+        email = EmailMessage(mail_title, message, to=[mail_to])
+        email.send()
+            
         
 class Login(APIView):
     def post(self, request, *args, **kwargs):
@@ -135,6 +161,22 @@ class Login(APIView):
                 'access_token': str(token.access_token),
                 'user_id': user.id,
             })
+     
+class ActivateView(APIView):       
+    def post(self, request, uidb64, token, *args, **kwargs):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExsit):
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            user.is_active = True
+            user.save()
+            auth.login(request, user)
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        else:
+            return Response({"ERROR": str('계정 활성화 오류')})
 
 class SearchUser(APIView):
     def post(self, request, *args, **kwargs):
