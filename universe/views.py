@@ -54,14 +54,14 @@ class Register(APIView):
             user.set_password(request.data['password'])
             user.is_active = False
             user.save()
-            self.confirmation_email(user)
+            self.confirmation_email(user, request.data['email'])
         
             serializer = UserSerializer(user)
             return Response(serializer.data)
         except IntegrityError as e:
             return Response({"ERROR": str(e)})
     
-    def confirmation_email(request, user):
+    def confirmation_email(request, user, email):
         current_site = get_current_site(request) 
         message = render_to_string('universe/activation_email.html', {
             'user': user,
@@ -70,7 +70,7 @@ class Register(APIView):
             'token': account_activation_token.make_token(user),
         })
         mail_title = "계정 활성화 확인 이메일"
-        mail_to = request.POST["email"]
+        mail_to = email
         email = EmailMessage(mail_title, message, to=[mail_to])
         email.send()
             
