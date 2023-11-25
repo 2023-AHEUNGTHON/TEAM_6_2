@@ -52,7 +52,7 @@ class Login(APIView):
     def post(self, request, *args, **kwargs):
         user = authenticate(email=request.data['email'], password=request.data['password'])
         if user is None:
-            return Response({'result': 'login fail'})
+            return Response({'result': 'login fail'}, status=400)
         else:
             token = TokenObtainPairSerializer.get_token(user)
             return Response({
