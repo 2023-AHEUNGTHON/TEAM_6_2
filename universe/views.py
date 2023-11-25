@@ -121,7 +121,7 @@ class Register(APIView):
             serializer = UserSerializer(user)
             return Response(serializer.data)
         except IntegrityError as e:
-            return Response({"ERROR": str(e)})
+            return Response({"ERROR": str(e)}, status=400)
         
 class Login(APIView):
     def post(self, request, *args, **kwargs):
