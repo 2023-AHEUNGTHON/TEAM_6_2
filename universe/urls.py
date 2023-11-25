@@ -23,5 +23,5 @@ urlpatterns = [
     path('matching/', MatchingUserView.as_view(), name='Matching'),
     path('userprofile/', UserProfileView.as_view(), name='userprofile'),
     path('updateuserprofile/', UpdateUserProfileView.as_view(), name='updateprofile'),
-    path('activate/<str:uidb64>/<str:token>/', ActivateView.as_view(), name='activate')
+    path('activate/<str:uidb64>/<str:token>/', ActivateView.as_view())
 ]
