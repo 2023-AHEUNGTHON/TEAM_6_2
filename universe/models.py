@@ -36,21 +36,13 @@ class User(AbstractUser):
     email = models.EmailField(max_length=50, null=False, unique=True)
     major = models.CharField(max_length=20, null=False)
     project = models.CharField(max_length=20, null=False)
-    student_id = models.CharField(max_length=20, null=False)
     password = models.CharField(max_length=100, null=False)
-    available = models.CharField(max_length=30, null=False)
+    start_date = models.IntegerField(null=False)
+    end_date = models.IntegerField(null=False)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username', 'grade', 'school', 'major', 'project', 'start_date', 'end_date']
     objects = UserManager()
-"""
-class Write(models.Model):
-    content=models.TextField()
-    category=models.CharField(max_length=20,null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    def __str__(self):
-        return f'{self.content} [{self.id}]'
-        """
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
