@@ -35,13 +35,15 @@ class User(AbstractUser):
     school = models.CharField(max_length=20, null=False)
     email = models.EmailField(max_length=50, null=False, unique=True)
     major = models.CharField(max_length=20, null=False)
+    job = models.CharField(max_length=20, null=False)
     project = models.CharField(max_length=20, null=False)
     password = models.CharField(max_length=100, null=False)
     start_date = models.IntegerField(null=False)
     end_date = models.IntegerField(null=False)
+    contents = models.TextField(max_length = 300, null=True)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'grade', 'school', 'major', 'project', 'start_date', 'end_date']
+    REQUIRED_FIELDS = ['username', 'grade', 'school', 'major', 'job', 'project', 'start_date', 'end_date']
     objects = UserManager()
 
 class Post(models.Model):
