@@ -235,7 +235,8 @@ class PostDetailView(APIView):
     def get(self, request, id, *args, **kwargs):
         post = Post.objects.filter(id=id).first()
         comments = Comment.objects.filter(post=post)
-        serializer = PostCommentSerializer({"post" : post, "comment" : comments})
+        user = User.objects.filter(id=post.user.id).first()
+        serializer = PostCommentSerializer({"user": user, "post" : post, "comment" : comments})
         return Response(serializer.data)
     
 class MatchingUserView(APIView):
