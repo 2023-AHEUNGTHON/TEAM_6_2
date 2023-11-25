@@ -55,6 +55,7 @@ class Register(APIView):
             user.is_active = False
             user.save()
             self.confirmation_email(user)
+        
             serializer = UserSerializer(user)
             return Response(serializer.data)
         except IntegrityError as e:
@@ -62,7 +63,7 @@ class Register(APIView):
     
     def confirmation_email(request, user):
         current_site = get_current_site(request) 
-        message = render_to_string('accounts/activation_email.html', {
+        message = render_to_string('universe/activation_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
