@@ -133,6 +133,7 @@ class Login(APIView):
             return Response({
                 'refresh_token': str(token),
                 'access_token': str(token.access_token),
+                'user_id': user.id,
             })
 
 class SearchUser(APIView):
@@ -181,7 +182,7 @@ class CreatePostView(APIView):
             return Response({"ERROR": str(e)})
 
 class ReadPostView(APIView):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         data = request.data
         title = data.get('title')
         content = data.get('content')
@@ -238,7 +239,7 @@ class PostDetailView(APIView):
         return Response(serializer.data)
     
 class MatchingUserView(APIView):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         data = request.data
         project = data.get('project')
         major = data.get('major')
@@ -257,7 +258,7 @@ class DetailUserView(APIView):
         return Response(serializer.data)
     
 class UserProfileView(APIView):
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         data = request.data
         id = data.get('id')
 
