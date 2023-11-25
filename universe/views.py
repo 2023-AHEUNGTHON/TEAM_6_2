@@ -60,17 +60,17 @@ class Register(APIView):
             uidb64       = urlsafe_base64_encode(force_bytes(user.pk))
             token        = account_activation_token.make_token(user)
             message_data = self.send_message(domain, uidb64, token)
-            self.confirmation_email(user, message_data ,user.email)
+            self.confirmation_email(message_data ,user.email)
             
             serializer = UserSerializer(user)
             return Response(serializer.data)
         except IntegrityError as e:
             return Response({"ERROR": str(e)})
     
-    def send_message(domain, uidb64, token):
+    def send_message(self, domain, uidb64, token):
         return f"아래 링크를 클릭하면 회원가입 인증이 완료됩니다.\n\n회원가입 링크 : http://{domain}/account/activate/{uidb64}/{token}\n\n감사합니다."
 
-    def confirmation_email(request, message_data, email):
+    def confirmation_email(self, message_data, email):
         # current_site = get_current_site(request) 
         # message = render_to_string('universe/activation_email.html', {
         #     'user': user,
