@@ -107,23 +107,8 @@ class CreatePostView(APIView):
             return Response({"ERROR": str(e)})
 
 class ReadPostView(APIView):
-    def get(self, request, *args, **kwargs):
-        data = request.data
-        title = data.get('title')
-        content = data.get('content')
-        category = data.get('category')
-        user = data.get('user')
-        
-        if title:
-            post = Post.objects.filter(title=title)
-        elif content:
-            post = Post.objects.filter(content=content)
-        elif category:
-            post = Post.objects.filter(category=category)
-        elif user:
-            post = Post.objects.filter(user=User.objects.get(id = user))
-        else:
-            post = Post.objects.all()
+    def get(self, request, category, *args, **kwargs):
+        post = Post.objects.filter(category=category)
         serializer = PostSerializer(post, many=True)
         return Response(serializer.data)
 
@@ -165,11 +150,7 @@ class PostDetailView(APIView):
         return Response(serializer.data)
     
 class MatchingUserView(APIView):
-    def get(self, request, *args, **kwargs):
-        data = request.data
-        project = data.get('project')
-        major = data.get('major')
-
+    def get(self, request, project, major, *args, **kwargs):
         users = User.objects.filter(project=project, major=major)
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
@@ -184,10 +165,7 @@ class DetailUserView(APIView):
         return Response(serializer.data)
     
 class UserProfileView(APIView):
-    def get(self, request, *args, **kwargs):
-        data = request.data
-        id = data.get('id')
-
+    def get(self, request, id, *args, **kwargs):
         user = User.objects.get(id=id)
         serializer = UserSerializer(user)
         return Response(serializer.data)
