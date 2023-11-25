@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-021z9%+m8aak7nxm^p31omp6o=ysj31-_+5d_nv9r5+9z!bpxf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['port-0-team-6-be-cn1vmr2clpde5wws.sel5.cloudtype.app', '127.0.0.1']
 
 
 # Application definition
@@ -80,9 +80,12 @@ MIDDLEWARE = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST=['https://127.0.0.1:8000', 
                        'https://localhost:3000',
-                       'http://localhost:3000']
+                       'http://localhost:3000',
+                       'https://port-0-team-6-fe-5g2x7f5q6qde5wws.sel5.cloudtype.app',]
 CORS_ALLOW_CREDENTIALS = True
-
+CSRF_TRUSTED_ORIGINS = ['https://port-0-team-6-be-cn1vmr2clpde5wws.sel5.cloudtype.app/',
+                        'https://localhost:8000',
+                        'https://localhost:3000',]
 ROOT_URLCONF = 'project.urls'
 
 SIMPLE_JWT = {
